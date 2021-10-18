@@ -1,32 +1,56 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+    <div class="container">
+        <app-header :quoteCount="quotes.length" :maxQuotes="maxQuotes"></app-header>
+
+        <appNewQuote @quoteadded="newQuote"></appNewQuote>
+        <app-body-quote @quoteDeleted="deleteQuote" :quotes="quotes"></app-body-quote>
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                <div class="alert alert-info">Info: Click on a Quote to delete it!</div>
+            </div>
+        </div>
+
     </div>
-    <router-view/>
-  </div>
 </template>
 
+<script>
+
+    import QuoteGrid from "./components/QuoteGrid";
+    import NewQuote from "./components/NewQuote";
+    import Header from "./components/Header";
+
+    export default {
+        data: function () {
+            return {
+                maxQuotes: 8,
+                quotes: [
+                    'Vue.js is very attractive and lovely'
+                ],
+            }
+        },
+        components: {
+            appBodyQuote: QuoteGrid,
+            appNewQuote: NewQuote,
+            appHeader: Header,
+        },
+        methods: {
+            newQuote(quote) {
+
+                if (this.quotes.length >= this.maxQuotes) {
+                    return alert('Please delete Quotes first!');
+                }
+                this.quotes.push(quote);
+            },
+            deleteQuote(index) {
+                this.quotes.splice(index, 1)
+            }
+
+        }
+
+    }
+
+</script>
+
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
 
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
 </style>
